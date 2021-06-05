@@ -26,6 +26,7 @@ export class Stateful extends Component {
     super(props)
     Object.assign(this, props._stateless_)
     this.setSelf(this)
+    if (Stateful.getDerivedStateFromError) this.componentDidCatch = this._componentDidCatch
   }
 
   render() {
@@ -62,14 +63,21 @@ export class Stateful extends Component {
       fn()
     })
   }
+
+  _componentDidCatch(error, info) {
+    this.lifeCycles.willUnmount.forEach(([_, fn]) => {
+      fn(error, info)
+    })
+  }
 }
 
 export function buildStateful(getDerivedStateFromProps, getDerivedStateFromError) {
-  class NStateful extends Component {
+  class Stateful extends Component {
     constructor(props) {
       super(props)
       Object.assign(this, props._stateless_)
       this.setSelf(this)
+      if (Stateful.getDerivedStateFromError) this.componentDidCatch = this._componentDidCatch
     }
 
     render() {
@@ -105,16 +113,10 @@ export function buildStateful(getDerivedStateFromProps, getDerivedStateFromError
         fn()
       })
     }
-
-    componentDidCatch(error, info) {
-      this.lifeCycles.willUnmount.forEach(([_, fn]) => {
-        fn(error, info)
-      })
-    }
   }
 
   if (getDerivedStateFromProps) Stateful.getDerivedStateFromProps = getDerivedStateFromProps
-  if (getDerivedStateFromError)Stateful.getDerivedStateFromError = getDerivedStateFromError
+  if (getDerivedStateFromError) Stateful.getDerivedStateFromError = getDerivedStateFromError
 
   return Stateful
 }
