@@ -62,16 +62,10 @@ export class Stateful extends Component {
       fn()
     })
   }
-
-  componentDidCatch(error, info) {
-    this.lifeCycles.willUnmount.forEach(([_, fn]) => {
-      fn(error, info)
-    })
-  }
 }
 
 export function buildStateful(getDerivedStateFromProps, getDerivedStateFromError) {
-  class Stateful extends Component {
+  class NStateful extends Component {
     constructor(props) {
       super(props)
       Object.assign(this, props._stateless_)

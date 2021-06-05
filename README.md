@@ -27,7 +27,7 @@ const increaseByOneOnClick = ({makeState, getProps, addContext, setHoc, on, setG
   addContext('style', ContextProvider, shouldUpdateifContextChange1)
   addContext('style2', ContextProvider2, shouldUpdateifContextChange2)
 
-  //=> ATTENTION, props from HOC are not avaliable in the contruct phase!
+  //=> ATTENTION, props from HOC are not available in the construct phase!
   setHoc((comp) => myGoodOldHoc(comp)) 
 
   // Behaves similar to use state
@@ -52,7 +52,7 @@ const increaseByOneOnClick = ({makeState, getProps, addContext, setHoc, on, setG
   setGetDerivedState.fromErrors = (error) => {console.log('this function will be set as the static getDerivedStateFromProps')}
 
   // add some extra functionality like you would do with hooks
-  // statefull provider provides a scope to the state and lifecycle access of logic providers
+  // stateful provider provides a scope to the state and lifecycle access of logic providers
 
   const [getVal, setVal, onWhatever] = myLogicProvider(statefulProvider('logic1'))
   const [getStuff, setStuff, onWhateverElse] = otherLogicProvider(statefulProvider('greatLogic'))
@@ -73,7 +73,7 @@ const increaseByOneOnClick = ({makeState, getProps, addContext, setHoc, on, setG
 
 ## Basics
 
-The basic component that should be passed to ```makeStateful``` is a function that returns the component you actually want to render. Everything else before that will be executed only once (like the class constructor) when the component is instanciated. 
+The basic component that should be passed to ```makeStateful``` is a function that returns the component you actually want to render. Everything else before that will be executed only once (like the class constructor) when the component is instantiated. 
 
 ## Why
 
@@ -85,13 +85,13 @@ Mostly because hooks are bad because:
 
 Good because
 1. Let you write less code
-2. Make Isolating logic easyer
+2. Make Isolating logic easier
 
 This package tries to fix that, to bring all the functionalities of class components to functional ones. The goal of this package is to allow people to write functional components with less black magic that have all the advantages of classes, and the compactness of hooks.
 
 ## State
 
-You can create a state element you can use makeState. Make state will return a getter and setter function for your state entry. Make function requires a name and a value. If no name is passed the name will be set as ```"default"```.
+You can create a state member by using makeState. Make state will return a getter and setter function for your state entry. Make function requires a name and a value. If no name is passed the name will be set as ```"default"```.
 Notes:
 
 - *The name of the state needs to be unique*
@@ -102,7 +102,7 @@ Notes:
   [stateGetter, stateSetter] = makeState(name)(value)
 ```
 
-- **name (String)**: a unique name withing your component. If not defined it will default to 'default'
+- **name (String)**: a unique name within your component. If not defined it will default to 'default'
 - **value**: the initial state value
 - **stateGetter (function)**: a function that returns the current value of your state
 - **stateSetter (function)**: a function to set the state
@@ -115,20 +115,20 @@ The state setter calls can be used in the same way as react's setState
   stateSetter(updater, [callback]) 
 ``` 
 
-- **updater (any)**: if the update is a fuction it will be called as ```updater(stae)```
+- **updater (any)**: if the update is a function it will be called as ```updater(stae)```
 
 The only difference with react setState is that the updater will be already wrapped in a function call when calling react's setState
 
 ## Props
 
-The props are accessible though the ```getProps()``` method. When called withing the component setup it will return the initial props. Calls within the render component will return the props at the spefic render time.
+The props are accessible through the ```getProps()``` method. When called within the component setup it will return the initial props. Calls within the render component will return the props at the specific render time.
 
 ### Caveats
 
-There are 2 main caviats when calling ```getProps()``` during set up:
+There are 2 main caveats when calling ```getProps()``` during set up:
 
 - getProps will have access to context props **ONLY AFTER** addContext has been called
-- getProps will **NOT** return props from HOC's during set up
+- getProps will **NOT** return props from HOC's during setup
 
 ## Context
 
@@ -153,7 +153,7 @@ the signature of this function is:
 ```
 
 Caveats:
-- If nothing is returned we will try to rerender the component will try to render by default
+- If nothing is returned we will try to re render the component will try to render by default
 
 ## HOC
 
@@ -168,8 +168,8 @@ Caveats:
 - The HOC functionality will not be called until AFTER the component setup face, so don't expect to have access to any props that might come from HOC. EX: If your hoc pass a prop called *banana*, calling `getProps().banana` during the component setup will return ```undefined```.
 
 ### Adding lifecycle methods
-Makes statefull allows you to access to ALL the lifecicle methods of react Class Components.
-To add any of the avaliable lifecycle method in react you need to call ```on.<lifecyclemethod>```. Attention, I removed the word 'componet' from lifecycle methods since it's superflous.
+Makes stateful allows you to access ALL the lifecycle methods of React Class Components.
+To add any of the available lifecycle methods in react you need to call ```on.<lifecyclemethod>```. Attention, I removed the word 'component' from lifecycle methods since it's superfluous.
 
 ### Syntax
 ```js
@@ -190,11 +190,11 @@ To improve readability and reduce parentesys, the behavior of ```on.<lifecycleme
   on.didMount = () => console.log('this will execute third on did mount')
 ```
 
-The call orther is guaranteed to be the same as the orther in which the function were added.
+The call other is guaranteed to be the same as the other in which the function were added.
 
 ### Should Component Update
 
-By default ```shouldComponentUpdate``` returns true. If you add several callbacks to be called on ```shouldComponentUpdate```, the first one to return a boolean will the return alue of  ```shouldComponentUpdate```. Example:
+By default ```shouldComponentUpdate``` returns true. If you add several callbacks to be called on ```shouldComponentUpdate```, the first one to return a boolean will the return value of  ```shouldComponentUpdate```. Example:
 
 ```js
   // nextProps = {num: 1}
@@ -228,7 +228,7 @@ To set ```static getDerivedStateFromProps``` and ```static getDerivedStateFromEr
 
 ## Isolating logic
 
-Just like hooks it is super easy to add external logic. Moreover, in order to isolate the access to state, you can (but you don't have to) scope lifecycle methods and makeState. This will not only remove possible conflicts when setting state, but will also limit the access to the full state from logic providers during the calls to ```getSnapshotBeforeUpdate```, ```componentDidUpdate```, and ```shouldComponentUpdate```. Withing your logic provider you can use ```makeState```, and the ```on``` setters just like you would have done if you had a regular componet. 
+Just like hooks it is super easy to add external logic. Moreover, in order to isolate the access to state, you can (but you don't have to) scope lifecycle methods and makeState. This will not only remove possible conflicts when setting state, but will also limit the access to the full state from logic providers during the calls to ```getSnapshotBeforeUpdate```, ```componentDidUpdate```, and ```shouldComponentUpdate```. Within your logic provider you can use ```makeState```, and the ```on``` setters just like you would have done if you had a regular component. 
 
 ### Syntax
 ```js
@@ -237,7 +237,7 @@ Just like hooks it is super easy to add external logic. Moreover, in order to is
 
 ## Passing refs
 
-if you set a ref on the component you will simply not recieve it. If you want o pass a ref just use a props name other than "ref". For example
+if you set a ref on the component you will simply not receive it. If you want to pass a ref just use a props name other than "ref". For example
 
 ```jsx
   <MyMakeStatefullComponet ref={myRef}>
@@ -263,8 +263,9 @@ The only thing missing is the implementation of the static method displayName an
 
 ## Contributing
 
-YES PLESE! :)
+YES PLEASE! :)
 
 ## License
 
 MIT © [pensarfeo](https://github.com/pensarfeo)
+
